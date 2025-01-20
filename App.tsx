@@ -5,113 +5,134 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   useColorScheme,
   View,
+  Pressable,
+  Alert,
+  Keyboard,
 } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  CioLogLevel,
+  CustomerIO,
+  CustomerioConfig,
+  CustomerIOEnv,
+  Region,
+} from 'customerio-reactnative';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+Sentry.init({
+  dsn: '', // Add your DSN here
+  environment: 'staging', // Sentry environment
+  integrations: [
+    Sentry.mobileReplayIntegration({
+      maskAllText: true, // Masks all textual inputs to prevent PII exposure
+      maskAllImages: true, // Masks images to avoid visual PII
+      maskAllVectors: false, // Optional, based on sensitivity
+    }), // Adding this for session replay integration
+  ],
+  appHangTimeoutInterval: 1,
+  //when we remove the following object the issue went away.
+  _experiments: {
+    replaysSessionSampleRate: 1.0, // Capture 10% of sessions in production
+    replaysOnErrorSampleRate: 1.0, // Always capture replays when an error occurs
+    // profilesSampleRate is relative to tracesSampleRate.
+    // Here, we'll capture profiles for 30% of transactions.
+    profilesSampleRate: 0.3,
+  },
+});
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const CUSTOMERIO_SITEID = ''; // Add your Customer.io site ID here
+const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  const [cioid, setCioId] = useState<string>('');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect(() => {
+    try {
+      const data = new CustomerioConfig();
+      data.logLevel = CioLogLevel.debug;
+      data.autoTrackDeviceAttributes = true;
+      data.autoTrackPushEvents = true;
+      data.enableInApp = true;
+
+      const env = new CustomerIOEnv();
+      env.siteId = CUSTOMERIO_SITEID;
+      env.apiKey = CUSTOMERIO_APIKEY;
+      env.region = Region.EU;
+      CustomerIO.initialize(env, data);
+    } catch (error) {
+      console.error('Error initializing Customer.io', error);
+    }
+  }, []);
+
+  const identifyUser = useCallback(() => {
+    try {
+      CustomerIO.identify(cioid);
+      Keyboard.dismiss();
+      Alert.alert('User Identified', `User with ID ${cioid} identified`);
+    } catch (error) {
+      console.error('Error identifying user', error);
+    }
+  }, [cioid]);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={styles.safeArea}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={Colors.lighter}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setCioId}
+          placeholder="Enter ID"
+        />
+        <Pressable onPress={identifyUser} style={styles.button}>
+          <Text style={styles.buttonText}>Identify</Text>
+        </Pressable>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  safeArea: {
+    backgroundColor: Colors.lighter,
+    flex: 1,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    width: '80%',
   },
-  highlight: {
-    fontWeight: '700',
+  button: {
+    backgroundColor: '#007BFF',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
   },
 });
 
