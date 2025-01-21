@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   SafeAreaView,
@@ -26,6 +19,7 @@ import {
   CustomerIO,
   CustomerioConfig,
   CustomerIOEnv,
+  InAppMessageEventType,
   Region,
 } from 'customerio-reactnative';
 
@@ -55,7 +49,8 @@ const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-  const [cioid, setCioId] = useState<string>('');
+  const [cioId, setCioId] = useState<string>('');
+  const [timeToAlive, setTimeToAlive] = useState<Date | null>(null);
 
   useEffect(() => {
     try {
@@ -75,15 +70,34 @@ function App(): JSX.Element {
     }
   }, []);
 
+  useEffect(() => {
+    CustomerIO.inAppMessaging().registerEventsListener(event => {
+      if (event.eventType === InAppMessageEventType.messageDismissed) {
+        setTimeToAlive(new Date());
+      }
+    });
+  }, []);
+
   const identifyUser = useCallback(() => {
     try {
-      CustomerIO.identify(cioid);
+      CustomerIO.identify(cioId);
       Keyboard.dismiss();
-      Alert.alert('User Identified', `User with ID ${cioid} identified`);
+      Alert.alert('User Identified', `User with ID ${cioId} identified`);
     } catch (error) {
       console.error('Error identifying user', error);
     }
-  }, [cioid]);
+  }, [cioId]);
+
+  const onFocus = useCallback(() => {
+    if (timeToAlive) {
+      setTimeToAlive(null);
+      Alert.alert(
+        `took ${
+          new Date().getTime() - timeToAlive.getTime()
+        } ms to responsive after in-app message dismissed`,
+      );
+    }
+  }, [timeToAlive]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -94,6 +108,7 @@ function App(): JSX.Element {
       <View style={styles.container}>
         <TextInput
           style={styles.input}
+          onFocus={onFocus}
           onChangeText={setCioId}
           placeholder="Enter ID"
         />
