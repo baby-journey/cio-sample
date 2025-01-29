@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@sentry/react-native": "6.4.0",
-    "customerio-reactnative": "3.7.0",
+    "customerio-reactnative": "^4.2.1",
     "react": "18.2.0",
     "react-native": "0.72.17"
   },

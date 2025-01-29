@@ -2838,10 +2838,10 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.3.tgz#d80ff294d114fb0e6ac500fbf85b60137d7eff81"
   integrity sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==
 
-customerio-reactnative@3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/customerio-reactnative/-/customerio-reactnative-3.7.0.tgz#da8b746f2e8a365a6ec5a411dd67c803618c7bdf"
-  integrity sha512-PI1G7qI8h2g/umc0IUQ3nVmCOYzBNBfUSJDUWbIwQQFC8Wf7qZ7QkjB/DKQKN2jsgwfnE7BRP+jPT01gFtI9WQ==
+customerio-reactnative@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/customerio-reactnative/-/customerio-reactnative-4.2.1.tgz#15646631c0d8c9a0b214c05617ff0892240b7b42"
+  integrity sha512-+PAqjTM1N7qlNrVSZb4CDWQc62dlqqG/Xs1UvT0pNgTGx3XfbUXu5xJ+OnT3qT1OO4jwHG1EbN1gKu+/UQt6yw==
 
 data-view-buffer@^1.0.2:
   version "1.0.2"

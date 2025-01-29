@@ -15,16 +15,16 @@ import * as Sentry from '@sentry/react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {
+  CioConfig,
   CioLogLevel,
+  CioRegion,
   CustomerIO,
-  CustomerioConfig,
-  CustomerIOEnv,
   InAppMessageEventType,
-  Region,
+  PushClickBehaviorAndroid,
 } from 'customerio-reactnative';
 
 Sentry.init({
-  dsn: '', // Add your DSN here
+  dsn: 'https://cea4d6215dc543f591933ceb2261f87b@o520608.ingest.sentry.io/5631203', // Add your DSN here
   environment: 'staging', // Sentry environment
   integrations: [
     Sentry.mobileReplayIntegration({
@@ -46,6 +46,7 @@ Sentry.init({
 
 const CUSTOMERIO_SITEID = ''; // Add your Customer.io site ID here
 const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
+const CUSTOMERIO_CDPKEY = ''; // Add your Customer.io API key here
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,24 +55,33 @@ function App(): JSX.Element {
 
   useEffect(() => {
     try {
-      const data = new CustomerioConfig();
-      data.logLevel = CioLogLevel.debug;
-      data.autoTrackDeviceAttributes = true;
-      data.autoTrackPushEvents = true;
-      data.enableInApp = true;
+      const config: CioConfig = {
+        cdpApiKey: CUSTOMERIO_CDPKEY,
+        // Optional: Set other configuration options
+        migrationSiteId: CUSTOMERIO_SITEID,
+        inApp: {
+          siteId: CUSTOMERIO_SITEID,
+        },
+        logLevel: CioLogLevel.Debug,
+        trackApplicationLifecycleEvents: true,
+        autoTrackDeviceAttributes: true,
+        // autoTrackPushEvents: true,
+        region: CioRegion.EU,
+        push: {
+          android: {
+            pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack,
+          },
+        },
+      };
 
-      const env = new CustomerIOEnv();
-      env.siteId = CUSTOMERIO_SITEID;
-      env.apiKey = CUSTOMERIO_APIKEY;
-      env.region = Region.EU;
-      CustomerIO.initialize(env, data);
+      CustomerIO.initialize(config);
     } catch (error) {
       console.error('Error initializing Customer.io', error);
     }
   }, []);
 
   useEffect(() => {
-    CustomerIO.inAppMessaging().registerEventsListener(event => {
+    CustomerIO.inAppMessaging.registerEventsListener(event => {
       if (event.eventType === InAppMessageEventType.messageDismissed) {
         setTimeToAlive(new Date());
       }
@@ -80,7 +90,9 @@ function App(): JSX.Element {
 
   const identifyUser = useCallback(() => {
     try {
-      CustomerIO.identify(cioId);
+      CustomerIO.identify({
+        userId: cioId,
+      });
       Keyboard.dismiss();
       Alert.alert('User Identified', `User with ID ${cioId} identified`);
     } catch (error) {
