@@ -18,9 +18,9 @@ Sentry.init({
   dsn: '',
   environment: 'staging',
   integrations: [
-    new Sentry.Integrations.FunctionToString(),
-    new Sentry.Integrations.Dedupe(),
-    new Sentry.Integrations.ReactNativeTracing(),
+    Sentry.functionToStringIntegration(), // This integration allows the SDK to provide original functions and method names, even when those functions or methods are wrapped by our error or breadcrumb handlers.
+    Sentry.dedupeIntegration(), // This integration is enabled by default, but only deduplicates certain events. It can be helpful if you're receiving many duplicate errors. Note, that Sentry only compares stack traces and fingerprints.
+    Sentry.reactNativeTracingIntegration(), // This integration allows the SDK to automatically capture performance data for React Native applications.
   ],
   tracesSampleRate: 1.0,
   appHangTimeoutInterval: 2,
