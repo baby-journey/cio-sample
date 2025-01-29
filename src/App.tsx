@@ -33,6 +33,17 @@ Sentry.init({
 const CUSTOMERIO_SITEID = '';
 const CUSTOMERIO_APIKEY = '';
 
+const linking = {
+  prefixes: ['staging.babyjourney.se://', 'https://staging.babyjourney.se/'],
+  config: {
+    screens: {
+      Home: 'screen/home',
+      Content: 'screen/content',
+      Profile: 'screen/profile',
+    },
+  },
+};
+
 function App(): JSX.Element {
   useEffect(() => {
     try {
@@ -55,7 +66,7 @@ function App(): JSX.Element {
   const Tab = createBottomTabNavigator();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Content" component={ContentScreen} />
