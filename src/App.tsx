@@ -2,10 +2,6 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as Sentry from '@sentry/react-native';
-
-import HomeScreen from './src/screens/HomeScreen';
-import ContentScreen from './src/screens/ContentScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
 import {
   CioLogLevel,
   CustomerIO,
@@ -14,13 +10,17 @@ import {
   Region,
 } from 'customerio-reactnative';
 
+import HomeScreen from './screens/HomeScreen';
+import ContentScreen from './screens/ContentScreen';
+import ProfileScreen from './screens/ProfileScreen';
+
 Sentry.init({
   dsn: '',
   environment: 'staging',
   integrations: [
-    Sentry.functionToStringIntegration(),
-    Sentry.dedupeIntegration(),
-    Sentry.reactNativeTracingIntegration(),
+    new Sentry.Integrations.FunctionToString(),
+    new Sentry.Integrations.Dedupe(),
+    new Sentry.Integrations.ReactNativeTracing(),
   ],
   tracesSampleRate: 1.0,
   appHangTimeoutInterval: 2,
@@ -32,8 +32,6 @@ Sentry.init({
 
 const CUSTOMERIO_SITEID = '';
 const CUSTOMERIO_APIKEY = '';
-
-const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -53,6 +51,8 @@ function App(): JSX.Element {
       console.error('Error initializing Customer.io', error);
     }
   }, []);
+
+  const Tab = createBottomTabNavigator();
 
   return (
     <NavigationContainer>
