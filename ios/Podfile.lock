@@ -1,29 +1,36 @@
 PODS:
+  - "AnalyticsSwiftCIO (1.5.14+cio.1)":
+    - JSONSafeEncoding (= 2.0.0)
+    - Sovran (= 1.1.1)
   - boost (1.76.0)
   - CocoaAsyncSocket (7.6.5)
-  - customerio-reactnative (3.7.0):
-    - customerio-reactnative/nopush (= 3.7.0)
-    - CustomerIO/MessagingInApp (= 2.13.0)
-    - CustomerIO/Tracking (= 2.13.0)
+  - customerio-reactnative (4.2.1):
+    - customerio-reactnative/nopush (= 4.2.1)
+    - CustomerIO/DataPipelines (= 3.7.2)
+    - CustomerIO/MessagingInApp (= 3.7.2)
     - React-Core
-  - customerio-reactnative/nopush (3.7.0):
-    - CustomerIO/MessagingInApp (= 2.13.0)
-    - CustomerIO/MessagingPush (= 2.13.0)
-    - CustomerIO/Tracking (= 2.13.0)
+  - customerio-reactnative/nopush (4.2.1):
+    - CustomerIO/DataPipelines (= 3.7.2)
+    - CustomerIO/MessagingInApp (= 3.7.2)
+    - CustomerIO/MessagingPush (= 3.7.2)
     - React-Core
-  - CustomerIO/MessagingInApp (2.13.0):
-    - CustomerIOMessagingInApp (= 2.13.0)
-  - CustomerIO/MessagingPush (2.13.0):
-    - CustomerIOMessagingPush (= 2.13.0)
-  - CustomerIO/Tracking (2.13.0):
-    - CustomerIOTracking (= 2.13.0)
-  - CustomerIOCommon (2.13.0)
-  - CustomerIOMessagingInApp (2.13.0):
-    - CustomerIOTracking (= 2.13.0)
-  - CustomerIOMessagingPush (2.13.0):
-    - CustomerIOTracking (= 2.13.0)
-  - CustomerIOTracking (2.13.0):
-    - CustomerIOCommon (= 2.13.0)
+  - CustomerIO/DataPipelines (3.7.2):
+    - CustomerIODataPipelines (= 3.7.2)
+  - CustomerIO/MessagingInApp (3.7.2):
+    - CustomerIOMessagingInApp (= 3.7.2)
+  - CustomerIO/MessagingPush (3.7.2):
+    - CustomerIOMessagingPush (= 3.7.2)
+  - CustomerIOCommon (3.7.2)
+  - CustomerIODataPipelines (3.7.2):
+    - "AnalyticsSwiftCIO (= 1.5.14+cio.1)"
+    - CustomerIOCommon (= 3.7.2)
+    - CustomerIOTrackingMigration (= 3.7.2)
+  - CustomerIOMessagingInApp (3.7.2):
+    - CustomerIOCommon (= 3.7.2)
+  - CustomerIOMessagingPush (3.7.2):
+    - CustomerIOCommon (= 3.7.2)
+  - CustomerIOTrackingMigration (3.7.2):
+    - CustomerIOCommon (= 3.7.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.72.17)
   - FBReactNativeSpec (0.72.17):
@@ -96,6 +103,7 @@ PODS:
   - hermes-engine (0.72.17):
     - hermes-engine/Pre-built (= 0.72.17)
   - hermes-engine/Pre-built (0.72.17)
+  - JSONSafeEncoding (2.0.0)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -522,6 +530,7 @@ PODS:
     - Sentry/HybridSDK (= 8.41.0)
   - Sentry/HybridSDK (8.41.0)
   - SocketRocket (0.6.1)
+  - Sovran (1.1.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -597,12 +606,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AnalyticsSwiftCIO
     - CocoaAsyncSocket
     - CustomerIO
     - CustomerIOCommon
+    - CustomerIODataPipelines
     - CustomerIOMessagingInApp
     - CustomerIOMessagingPush
-    - CustomerIOTracking
+    - CustomerIOTrackingMigration
     - Flipper
     - Flipper-Boost-iOSX
     - Flipper-DoubleConversion
@@ -612,10 +623,12 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - FlipperKit
     - fmt
+    - JSONSafeEncoding
     - libevent
     - OpenSSL-Universal
     - Sentry
     - SocketRocket
+    - Sovran
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -707,14 +720,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AnalyticsSwiftCIO: d03712b33e85baecc86f0d38a6d53c97f7bc5bd1
   boost: 7dcd2de282d72e344012f7d6564d024930a6a440
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  CustomerIO: 55adb7377dff7afaf38c533c5bddaabfdd4203ac
-  customerio-reactnative: 3559f5e2bf421f2573c689a352196a0f61ded2dd
-  CustomerIOCommon: 5c4c2d0ca81dd802dd3bab368c96fb3ee5ab7fe6
-  CustomerIOMessagingInApp: abe108b80c8deecac70741fa2c9928289fda5814
-  CustomerIOMessagingPush: c4a9a57de9e7ff1ab65e9b73cf49c7b4b155248e
-  CustomerIOTracking: d209e341d3732a8aa23858faed2565f4c6ee5ef7
+  CustomerIO: f5a28a9b9ee82d785ad0debf63ea7bcf68f373c1
+  customerio-reactnative: 2c75c95897399b4780bdc127bd54344fb34fd1df
+  CustomerIOCommon: 35be8270b80617a401653387ad6197bc468392ff
+  CustomerIODataPipelines: 3c66df9f1d1cdf6fc10ef7a6fc8bfdc561e30dcf
+  CustomerIOMessagingInApp: d31b5b0d2324ee1191d6f59e915e5d5218787b0c
+  CustomerIOMessagingPush: 0d08c4ac2bc2ff3c30fe4dd44a4c487fac4b1d3d
+  CustomerIOTrackingMigration: ca96f95516b53d2e24ad1ff4160cae9c8a85ec9e
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 66398fc2381d8fa1eee4c0f80d931587a7b927e8
   FBReactNativeSpec: 0f8cecf999d709dba7626bbf565b1b5f8f46a5c1
@@ -729,6 +744,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 982096772bd947125ee3b4f72ace6cb9a33f1d02
+  JSONSafeEncoding: 54722ebc4fe1482e3e60a8450e1287481e32dd8b
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
@@ -768,6 +784,7 @@ SPEC CHECKSUMS:
   RNSentry: 22de4208fe67593ee2fccca1c7bb23d1a247add3
   Sentry: 54d0fe6c0df448497c8ed4cce66ccf7027e1823e
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  Sovran: f8212bb3855042a24689a73ea0219ca5295235da
   Yoga: ef534101bb891fb09bae657417f34d399c1efe38
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
