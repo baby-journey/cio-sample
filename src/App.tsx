@@ -4,11 +4,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
 import {
+  CioConfig,
   CioLogLevel,
+  CioRegion,
   CustomerIO,
-  CustomerioConfig,
-  CustomerIOEnv,
-  Region,
+  PushClickBehaviorAndroid,
 } from 'customerio-reactnative';
 
 import HomeScreen from './screens/HomeScreen';
@@ -43,8 +43,9 @@ Sentry.init({
   },
 });
 
-const CUSTOMERIO_SITEID = '';
-const CUSTOMERIO_APIKEY = '';
+const CUSTOMERIO_SITEID = ''; // Add your Customer.io site ID here
+const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
+const CUSTOMERIO_CDPKEY = ''; // Add your Customer.io API key here
 
 const linking = {
   prefixes: ['staging.babyjourney.se://', 'https://staging.babyjourney.se/'],
@@ -83,17 +84,26 @@ function App(): JSX.Element {
 
   useEffect(() => {
     try {
-      const config = new CustomerioConfig();
-      config.logLevel = CioLogLevel.debug;
-      config.autoTrackDeviceAttributes = true;
-      config.autoTrackPushEvents = true;
-      config.enableInApp = true;
+      const config: CioConfig = {
+        cdpApiKey: CUSTOMERIO_CDPKEY,
+        // Optional: Set other configuration options
+        migrationSiteId: CUSTOMERIO_SITEID,
+        inApp: {
+          siteId: CUSTOMERIO_SITEID,
+        },
+        logLevel: CioLogLevel.Debug,
+        trackApplicationLifecycleEvents: true,
+        autoTrackDeviceAttributes: true,
+        // autoTrackPushEvents: true,
+        region: CioRegion.EU,
+        push: {
+          android: {
+            pushClickBehavior: PushClickBehaviorAndroid.ResetTaskStack,
+          },
+        },
+      };
 
-      const env = new CustomerIOEnv();
-      env.siteId = CUSTOMERIO_SITEID;
-      env.apiKey = CUSTOMERIO_APIKEY;
-      env.region = Region.EU;
-      CustomerIO.initialize(env, config);
+      CustomerIO.initialize(config);
     } catch (error) {
       console.error('Error initializing Customer.io', error);
     }

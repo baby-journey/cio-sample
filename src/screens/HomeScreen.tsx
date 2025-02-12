@@ -16,7 +16,7 @@ function HomeScreen() {
   const identifyUser = useCallback(() => {
     try {
       // Assuming CustomerIO is imported and initialized
-      CustomerIO.identify(cioId);
+      CustomerIO.identify({userId: cioId});
       Keyboard.dismiss();
       Alert.alert('User Identified', `User with ID ${cioId} identified`);
     } catch (error) {
