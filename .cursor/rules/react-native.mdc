@@ -1,0 +1,167 @@
+---
+description: 
+globs: 
+---
+
+# React Native Project Rules
+
+## TypeScript Rules
+- All new files should use TypeScript (.tsx or .ts extensions)
+- Explicitly define types for props, state, and function parameters
+- Avoid using 'any' type unless absolutely necessary
+- Use interfaces for object types
+- Use type for union types or simple aliases
+
+## React Component Rules
+- Use functional components with hooks
+- Props interface should be named [ComponentName]Props
+- Each component should be in its own file
+- Component file names should be PascalCase
+- Export components as default when they are the main component in the file
+
+## File Structure
+/src
+  /components      # Reusable components
+  /screens         # Screen components
+  /contexts        # React Context files
+  /services        # Business logic and API calls
+  /utils          # Helper functions and constants
+  /hooks          # Custom React hooks
+  /types          # TypeScript type definitions
+  /assets         # Images, fonts, etc.
+  /navigation     # Navigation configuration
+
+## Naming Conventions
+- Components: PascalCase (e.g., HomeScreen.tsx)
+- Files: PascalCase for components, camelCase for others
+- Functions: camelCase
+- Constants: UPPER_SNAKE_CASE
+- Interfaces: PascalCase with 'I' prefix (e.g., IUserProps)
+- Types: PascalCase
+- Context files: PascalCase with 'Context' suffix
+
+## Code Style
+- Use arrow functions for component definitions
+- Use destructuring for props and state
+- Keep components focused and small
+- Extract reusable logic into custom hooks
+- Use meaningful variable and function names
+
+## Mobile-Specific Rules
+- Use Platform.select() for platform-specific code
+- Keep styles in StyleSheet.create()
+- Use flex layout for responsive design
+- Handle safe areas and notches
+- Consider different screen sizes
+
+## State Management
+- Use React Context for global state
+- Keep state as close to where it's used as possible
+- Use useReducer for complex state logic
+- Avoid prop drilling
+
+## Performance
+- Memoize callbacks with useCallback
+- Memoize expensive computations with useMemo
+- Use React.memo for pure components
+- Optimize images and assets
+- Lazy load components when possible
+
+## Error Handling
+- Use try-catch blocks for async operations
+- Implement proper error boundaries
+- Log errors appropriately
+- Show user-friendly error messages
+
+## Testing
+- Write tests for business logic
+- Test components with React Native Testing Library
+- Mock external dependencies
+- Test edge cases and error scenarios
+
+## Navigation
+- Use type-safe navigation
+- Define route params interface
+- Handle deep links properly
+- Consider navigation state persistence
+
+## Push Notifications
+- Handle both foreground and background notifications
+- Request permissions at appropriate time
+- Handle notification interactions
+- Support rich notifications
+
+## Example Component Structure:
+```typescript
+interface IComponentProps {
+  title: string;
+  onPress: () => void;
+}
+
+export const MyComponent: React.FC<IComponentProps> = ({
+  title,
+  onPress
+}) => {
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      {/* Component content */}
+    </View>
+  );
+};
+```
+
+## Example Context Structure:
+```typescript
+interface IContextState {
+  data: any;
+  loading: boolean;
+  error: Error | null;
+}
+
+interface IContextValue extends IContextState {
+  actions: {
+    fetchData: () => Promise<void>;
+    clearError: () => void;
+  };
+}
+
+const MyContext = createContext<IContextValue | undefined>(undefined);
+
+export const useMyContext = () => {
+  const context = useContext(MyContext);
+  if (!context) {
+    throw new Error('useMyContext must be used within MyProvider');
+  }
+  return context;
+};
+```
+
+## Example Service Structure:
+```typescript
+class MyService {
+  private static instance: MyService;
+
+  private constructor() {}
+
+  static getInstance(): MyService {
+    if (!MyService.instance) {
+      MyService.instance = new MyService();
+    }
+    return MyService.instance;
+  }
+
+  async fetchData(): Promise<void> {
+    try {
+      // Implementation
+    } catch (error) {
+      // Error handling
+    }
+  }
+}
+```
