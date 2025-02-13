@@ -42,9 +42,12 @@ Sentry.init({
   },
 });
 
-const CUSTOMERIO_SITEID = ''; // Add your Customer.io site ID here
-const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
-const CUSTOMERIO_CDPKEY = ''; // Add your Customer.io API key here
+// const CUSTOMERIO_SITEID = ''; // Add your Customer.io site ID here
+// const CUSTOMERIO_APIKEY = ''; // Add your Customer.io API key here
+// const CUSTOMERIO_CDPKEY = ''; // Add your Customer.io API key here
+const CUSTOMERIO_SITEID = '76b6ae9cdf213f7c06af';
+const CUSTOMERIO_APIKEY = '357919065a53b0a5119c';
+const CUSTOMERIO_CDPKEY = '5736867abbf4bc8cf922';
 
 const Tab = createBottomTabNavigator();
 

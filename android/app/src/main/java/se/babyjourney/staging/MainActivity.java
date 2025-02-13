@@ -1,4 +1,4 @@
-package com.ciosample;
+package se.babyjourney.staging;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

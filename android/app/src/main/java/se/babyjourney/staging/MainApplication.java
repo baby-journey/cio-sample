@@ -1,4 +1,4 @@
-package com.ciosample;
+package se.babyjourney.staging;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
